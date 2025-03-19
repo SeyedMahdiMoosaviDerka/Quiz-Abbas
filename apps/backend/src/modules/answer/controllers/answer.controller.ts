@@ -1,15 +1,26 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Query } from '@nestjs/common';
+import { CreateAnswerDto } from '@app/common/dto/answer/create-answer.dto';
 import { AnswerService } from '../services/answer.service';
-import { SubmitAnswerDto } from '../../../common/dto/answer/submit-answer.dto';
-import { ApiDocDecorator } from '@app/configs/swagger/decorator';
 
 @Controller('answers')
-export class AnswerController {
-  constructor(private readonly answerService: AnswerService) {}
+export class AnswersController {
+  constructor(private readonly answersService: AnswerService) {}
 
   @Post()
-  @ApiDocDecorator('submitAnswer')
-  submit(@Body() dto: SubmitAnswerDto) {
-    return this.answerService.submit(dto);
+  async create(
+    @Body() createAnswerDto: CreateAnswerDto,
+    @Query('validationLevel') validationLevel: 'none' | 'moderate' = 'none'
+  ) {
+    const result = await this.answersService.create(
+      createAnswerDto,
+      validationLevel
+    );
+    if (result.warnings.length > 0) {
+      return {
+        message: 'Answers saved with warnings',
+        warnings: result.warnings,
+      };
+    }
+    return { message: 'Answers saved successfully' };
   }
 }

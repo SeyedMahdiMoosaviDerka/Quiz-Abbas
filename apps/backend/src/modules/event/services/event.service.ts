@@ -1,22 +1,29 @@
+import { Event } from '@app/database/event/event.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Event } from '../../../database/event/event.entity';
-import { CreateEventDto } from '../../../common/dto/event/create-event.dto';
 
 @Injectable()
-export class EventService {
+export class EventsService {
   constructor(
     @InjectRepository(Event)
-    private eventRepository: Repository<Event>
+    private eventsRepository: Repository<Event>
   ) {}
 
-  async create(dto: CreateEventDto): Promise<Event> {
-    const event = this.eventRepository.create(dto);
-    return this.eventRepository.save(event);
+  findAll(): Promise<Event[]> {
+    return this.eventsRepository.find({ relations: ['quiz'] });
   }
 
-  async findAll(): Promise<Event[]> {
-    return this.eventRepository.find({ relations: ['quizzes'] });
+  findOne(id: number): Promise<Event> {
+    return this.eventsRepository.findOne({
+      where: { id },
+      relations: ['quiz'],
+    });
+  }
+
+  isEventStarted(eventId: number): Promise<boolean> {
+    return this.eventsRepository
+      .findOne({ where: { id: eventId } })
+      .then((event) => new Date() > event.startTime);
   }
 }

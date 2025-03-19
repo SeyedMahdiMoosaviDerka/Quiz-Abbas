@@ -1,5 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Quiz } from '@database/quiz/quiz.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
+import { Quiz } from '../quiz/quiz.entity';
 
 @Entity()
 export class Event {
@@ -9,12 +15,12 @@ export class Event {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ type: 'timestamp' })
   startTime: Date;
 
   @Column()
   info: string;
 
-  @OneToMany(() => Quiz, (quiz) => quiz.event)
-  quizzes: Quiz[];
+  @OneToOne(() => Quiz, (quiz) => quiz.event)
+  quiz: Quiz;
 }
