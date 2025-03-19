@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTheme } from '../../components/ThemeProvider';
 
 const Modal = ({
   isOpen,
@@ -74,6 +75,7 @@ const Modal = ({
 };
 
 export default function PanelPage() {
+  const { theme } = useTheme();
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<{
     title: string;
@@ -137,7 +139,11 @@ export default function PanelPage() {
   };
 
   return (
-    <div className="min-h-screen text-black  pb-16">
+    <div
+      className={`min-h-screen  ${
+        theme === 'dark' ? 'text-white' : 'text-black'
+      }  pb-16`}
+    >
       <div className="w-full max-w-screen-lg mx-auto">
         <div className="px-4 py-6">
           <h1 className="text-xl font-bold mb-6">All Events</h1>
