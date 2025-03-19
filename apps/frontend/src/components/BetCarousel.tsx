@@ -80,7 +80,6 @@ const BetCarousel: React.FC<BetCarouselProps> = ({ event }) => {
       : 'animate-slide-out-right';
   };
 
-  // Don't render navigation controls if there's only one slide
   const showNavigation = questions.length > 1;
 
   return (
@@ -90,12 +89,10 @@ const BetCarousel: React.FC<BetCarouselProps> = ({ event }) => {
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-      {/* Main slide with animation */}
       <div className={`transition-all duration-300 ${getAnimationClass()}`}>
         <BetSlide data={event} question={questions[currentSlide]} />
       </div>
 
-      {/* Navigation buttons - positioned at bottom of BetSlide */}
       {showNavigation && (
         <div className="absolute bottom-5 left-0 right-0 flex justify-center items-center gap-1 sm:gap-2 z-20 px-4">
           <button
@@ -107,7 +104,6 @@ const BetCarousel: React.FC<BetCarouselProps> = ({ event }) => {
             Prev
           </button>
 
-          {/* Indicators */}
           <div className="flex items-center gap-1 sm:gap-2 mx-1 sm:mx-3">
             {questions.map((_, index) => (
               <button
