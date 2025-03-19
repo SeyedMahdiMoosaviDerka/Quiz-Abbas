@@ -308,6 +308,17 @@ export const SW: Record<string, SwaggerEndpointConfig> = {
           error: 'DUPLICATE_SUBMISSION',
         },
       }),
+      ApiResponse({
+        status: HttpStatus.BAD_REQUEST,
+        description: 'Invalid answer format with strict validation',
+        type: ResponseDto,
+        example: {
+          statusCode: 400,
+          data: null,
+          message: 'Invalid answer "xyz" for question 0',
+          error: 'INVALID_ANSWER',
+        },
+      }),
     ],
   },
 };

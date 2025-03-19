@@ -1,6 +1,6 @@
 import React from 'react';
 import RadioOption from './RadioOption';
-import { cn } from '../../lib/utils';
+import { cn } from '../lib/utils';
 
 interface RadioGroupProps {
   label: string;

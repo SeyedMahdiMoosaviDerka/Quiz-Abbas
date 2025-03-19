@@ -1,5 +1,4 @@
-// frontend/src/contexts/QuizContext.tsx
-import React, {
+import {
   createContext,
   useContext,
   useState,
@@ -10,13 +9,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { Event, AnswerSubmission } from '../types';
 import { submitAnswers as submitAnswersApi } from '../api/events';
-
-interface QuizState {
-  userId: string;
-  currentEvent: Event | null;
-  answers: Record<string, string>;
-  submittedEvents: Set<number>;
-}
 
 interface QuizContextType {
   userId: string;
@@ -36,8 +28,6 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [userId, setUserId] = useLocalStorage<string>('quizUserId', uuidv4());
   const [currentEvent, setCurrentEventState] = useState<Event | null>(null);
-  const [storedCurrentEvent, setStoredCurrentEvent] =
-    useLocalStorage<Event | null>('currentEvent', null);
   const [answers, setAnswers] = useLocalStorage<Record<string, string>>(
     'quizAnswers',
     {}
@@ -47,21 +37,17 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({
     new Set()
   );
 
-  // Sync currentEvent with localStorage
   const setCurrentEvent = useCallback(
     (event: Event | null) => {
       setCurrentEventState(event);
-      setStoredCurrentEvent(event);
+      if (event && !userId) setUserId(uuidv4()); // Generate ID when quiz starts
     },
-    [setStoredCurrentEvent]
+    [setUserId]
   );
 
-  // Restore currentEvent on mount if not submitted
   useEffect(() => {
-    if (storedCurrentEvent && !submittedEvents.has(storedCurrentEvent.id)) {
-      setCurrentEventState(storedCurrentEvent);
-    }
-  }, [storedCurrentEvent, submittedEvents]);
+    if (!currentEvent && !submittedEvents.size) setUserId(uuidv4()); // Reset ID if no quiz in progress
+  }, [currentEvent, submittedEvents, setUserId]);
 
   const setAnswer = useCallback(
     (eventId: number, questionIndex: number, answer: string) => {
@@ -80,7 +66,6 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({
           questionIndex: idx,
           answer: answers[`${eventId}-${idx}`] || '',
         })) || [];
-
       const submission: AnswerSubmission = {
         userId,
         eventId,
@@ -89,16 +74,18 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({
       await submitAnswersApi(submission);
 
       setSubmittedEvents((prev) => new Set(prev).add(eventId));
-      setCurrentEvent(null); // Clears both state and localStorage
-      setUserId(uuidv4()); // Reset userId after submission
+      setCurrentEvent(null);
+      setAnswers({});
+      setUserId(uuidv4()); // Reset ID after submission
     },
     [
       userId,
       currentEvent,
       answers,
       setSubmittedEvents,
-      setUserId,
+      setAnswers,
       setCurrentEvent,
+      setUserId,
     ]
   );
 

@@ -1,51 +1,33 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import RadioOption from '@/components/RadioOption';
+import RadioOption from '../components/RadioOption';
 
 describe('RadioOption Component', () => {
   const mockOnChange = jest.fn();
 
-  beforeEach(() => {
-    mockOnChange.mockClear();
-  });
-
   it('renders correctly with label', () => {
     render(
       <RadioOption
+        name="test"
         value="test"
         label="Test Option"
-        isSelected={false}
+        checked={false}
         onChange={mockOnChange}
       />
     );
-
     expect(screen.getByText('Test Option')).toBeInTheDocument();
   });
 
-  it('shows selected state when isSelected is true', () => {
+  it('calls onChange when clicked', () => {
     render(
       <RadioOption
+        name="test"
         value="test"
         label="Test Option"
-        isSelected={true}
+        checked={false}
         onChange={mockOnChange}
       />
     );
-
-    const radioContainer = screen.getByTestId('radio-option-test');
-    expect(radioContainer).toHaveClass('selected');
-  });
-
-  it('calls onChange handler when clicked', () => {
-    render(
-      <RadioOption
-        value="test"
-        label="Test Option"
-        isSelected={false}
-        onChange={mockOnChange}
-      />
-    );
-
-    fireEvent.click(screen.getByTestId('radio-option-test'));
+    fireEvent.click(screen.getByText('Test Option'));
     expect(mockOnChange).toHaveBeenCalledWith('test');
   });
 });

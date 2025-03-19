@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import EventRow from '../components/ui/EventRow';
-import BetCarousel from '../components/ui/BetCarousel';
-import SummaryCard from '../components/ui/SummaryCard';
+import EventRow from '../components/EventRow';
+import BetCarousel from '../components/BetCarousel';
+import SummaryCard from '../components/SummaryCard';
 import { useQuiz } from '../contexts/QuizContext';
 import { fetchEvents } from '../api/events';
 import { Event } from '../types';
@@ -34,15 +34,13 @@ export default function Home() {
   };
 
   if (loading) {
-    return <div className="px-4 py-6 text-white">Loading events...</div>;
+    return <div className="px-4 py-6 text-foreground">Loading events...</div>;
   }
   return (
-    <div className="px-4 py-6">
+    <div className="px-4 py-6 bg-background text-foreground">
       {!currentEvent ? (
         <div>
-          <h1 className="text-xl font-bold mb-6 text-foreground">
-            Available Events
-          </h1>
+          <h1 className="text-xl font-bold mb-6">Available Events</h1>
           <div className="space-y-4">
             {events.map((event) => (
               <EventRow
@@ -57,7 +55,7 @@ export default function Home() {
         <div>
           <button
             onClick={handleBackToList}
-            className="mb-4 flex items-center text-sm text-foreground/80"
+            className="mb-4 flex items-center text-sm text-muted-foreground"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +79,7 @@ export default function Home() {
         <div>
           <button
             onClick={handleBackToList}
-            className="mb-4 flex items-center text-sm text-foreground/80"
+            className="mb-4 flex items-center text-sm text-muted-foreground"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

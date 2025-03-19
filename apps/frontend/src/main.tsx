@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from './components/ui/ThemeProvider';
+import { ThemeProvider } from './components/ThemeProvider';
 import { QuizProvider } from './contexts/QuizContext';
 import App from './app/app';
 

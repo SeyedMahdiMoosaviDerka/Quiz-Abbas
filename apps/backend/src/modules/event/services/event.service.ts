@@ -1,21 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Event } from '../../../database/event/event.entity';
+import { Event } from '@database/event/event.entity';
 import { CreateEventDto } from '@common/dto/event/create-event.dto';
 import { exceptions } from '@common/exceptions';
 
 @Injectable()
-export class EventsService {
+export class EventService {
   constructor(
     @InjectRepository(Event)
     private eventRepository: Repository<Event>
   ) {}
 
-  async create(dto: CreateEventDto): Promise<Event> {
-    const now = new Date();
-    if (new Date(dto.startTime) < now) throw exceptions.event.alreadyStarted();
-    const event = this.eventRepository.create(dto);
+  async create(createEventDto: CreateEventDto): Promise<Event> {
+    const event = this.eventRepository.create({
+      ...createEventDto,
+      startTime: new Date(createEventDto.startTime),
+    });
     return this.eventRepository.save(event);
   }
 
@@ -32,12 +33,22 @@ export class EventsService {
     return event;
   }
 
-  async isEventStarted(id: number): Promise<boolean> {
+  async update(id: number, updateEventDto: CreateEventDto): Promise<Event> {
     const event = await this.findOne(id);
-    return new Date() >= event.startTime;
+    Object.assign(event, {
+      ...updateEventDto,
+      startTime: new Date(updateEventDto.startTime),
+    });
+    return this.eventRepository.save(event);
   }
 
-  async isEventClosed(id: number): Promise<boolean> {
-    return await this.isEventStarted(id);
+  async remove(id: number): Promise<void> {
+    const event = await this.findOne(id);
+    await this.eventRepository.remove(event);
+  }
+
+  async isEventStarted(id: number): Promise<boolean> {
+    const event = await this.findOne(id);
+    return new Date() > event.startTime;
   }
 }
