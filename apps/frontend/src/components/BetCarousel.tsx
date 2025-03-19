@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import BetSlide from './BetSlide';
 import { Event } from '../types';
 
@@ -11,41 +11,44 @@ const BetCarousel: React.FC<BetCarouselProps> = ({ event }) => {
   const [animating, setAnimating] = useState(false);
   const [direction, setDirection] = useState<'next' | 'prev' | null>(null);
   const { questions } = event;
+
   const goToNextSlide = useCallback(() => {
-    if (animating || questions.length <= 1) return;
+    if (
+      animating ||
+      questions.length <= 1 ||
+      currentSlide + 1 === questions.length
+    )
+      return;
+
     setDirection('next');
     setAnimating(true);
 
-    // Set timeout to match animation duration
     setTimeout(() => {
       setCurrentSlide((prev) => (prev + 1) % questions.length);
       setTimeout(() => {
         setAnimating(false);
-      }, 50); // Small delay to ensure state updates after slide change
+      }, 50);
     }, 300);
-  }, [questions.length, animating]);
+  }, [questions.length, animating, currentSlide]);
 
   const goToPrevSlide = useCallback(() => {
-    if (animating || questions.length <= 1) return;
+    if (animating || questions.length <= 1 || currentSlide === 0) return;
     setDirection('prev');
     setAnimating(true);
 
-    // Set timeout to match animation duration
     setTimeout(() => {
       setCurrentSlide(
         (prev) => (prev - 1 + questions.length) % questions.length
       );
       setTimeout(() => {
         setAnimating(false);
-      }, 50); // Small delay to ensure state updates after slide change
+      }, 50);
     }, 300);
-  }, [questions.length, animating]);
+  }, [questions.length, animating, currentSlide]);
 
-  // Touch/swipe handling
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
-  // Required minimum swipe distance in pixels
   const minSwipeDistance = 50;
 
   const onTouchStart = (e: React.TouchEvent) => {

@@ -193,7 +193,6 @@ export default function PanelPage() {
         </div>
       </div>
 
-      {/* Modal */}
       {selectedEvent && (
         <Modal
           isOpen={modalOpen}

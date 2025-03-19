@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
-import PickAWinHeader from '../../components/PickAWinHeader';
+import { useState } from 'react';
 import EventRow from '../../components/EventRow';
 import BetCarousel from '../../components/BetCarousel';
 import { Event } from '../../types';
