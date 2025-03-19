@@ -7,7 +7,7 @@ import { AppController } from './controllers/app.controller';
 import { AppService } from './services/app.service';
 import { EventModule } from '@modules/event/event.module';
 import { QuizModule } from '@modules/quiz/quiz.module';
-import { AnswerModule } from '@modules/answer/answer.module';
+import { AnswerModule } from '../answer/answer.module';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { AnswerModule } from '@modules/answer/answer.module';
       username: 'postgres',
       password: 'root', // Replace with your actual password
       database: 'sports_quiz',
-      entities: [Event, Quiz, Answer],
+      autoLoadEntities: true,
       synchronize: true, // Set to false in production
     }),
     EventModule,

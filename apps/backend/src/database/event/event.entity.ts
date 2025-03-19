@@ -22,14 +22,14 @@ export class Event {
   info!: string;
 
   @Column({ nullable: true })
-  sportType?: string; // For multi-sport support
+  sportType?: string;
 
   @Column('json', { nullable: true })
-  homeTeam?: Team; // Team details
+  homeTeam?: Team;
 
   @Column('json', { nullable: true })
-  awayTeam?: Team; // Team details
+  awayTeam?: Team;
 
-  @OneToMany(() => Quiz, (quiz) => quiz.event) // Support up to 5 quizzes
+  @OneToMany(() => Quiz, (quiz) => quiz.event)
   quizzes!: Quiz[];
 }

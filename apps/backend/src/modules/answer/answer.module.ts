@@ -22,4 +22,4 @@ import { QuizModule } from '@modules/quiz/quiz.module';
     QuizModule,
   ],
 })
-export class AppModule {}
+export class AnswerModule {}

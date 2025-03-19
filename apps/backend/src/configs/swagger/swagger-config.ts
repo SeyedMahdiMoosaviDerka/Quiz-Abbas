@@ -3,10 +3,12 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpStatus } from '@nestjs/common';
 import { ApiOperationOptions, ApiResponseOptions } from '@nestjs/swagger';
 import { ResponseDto } from '../../common/dto/response/response.dto';
-import { CreateEventDto } from '../../common/dto/event/create-event.dto';
+import {
+  CreateEventDto,
+  TeamDto,
+} from '../../common/dto/event/create-event.dto';
 import { CreateQuizDto } from '../../common/dto/quiz/create-quiz.dto';
 import { CreateAnswerDto } from '../../common/dto/answer/create-answer.dto';
-import { AnswerItemDto } from '../../common/dto/answer/answer-item.dto';
 
 interface SwaggerEndpointConfig {
   operation: ApiOperationOptions;
@@ -17,7 +19,7 @@ export const SW: Record<string, SwaggerEndpointConfig> = {
   createEvent: {
     operation: {
       summary: 'Create a new sports event',
-      description: 'Adds a new event to the system.',
+      description: 'Adds a new event to the system with team details.',
     },
     responses: [
       {
@@ -26,16 +28,27 @@ export const SW: Record<string, SwaggerEndpointConfig> = {
         type: ResponseDto,
         content: {
           'application/json': {
-            schema: {
-              type: 'object',
-              properties: {
-                statusCode: { type: 'number', example: 201 },
-                data: {
-                  type: 'object',
-                  $ref: '#/components/schemas/CreateEventDto',
+            example: {
+              statusCode: 201,
+              data: {
+                id: 1,
+                name: 'Manchester City vs Manchester United',
+                startTime: '2025-04-01T15:00:00Z',
+                info: 'Answer 5/5 questions and win 50 USDT',
+                sportType: 'football',
+                homeTeam: {
+                  name: 'Manchester City',
+                  country: 'England',
+                  logoUrl: 'https://example.com/mc.png',
                 },
-                message: { type: 'string', example: 'Event created' },
+                awayTeam: {
+                  name: 'Manchester United',
+                  country: 'England',
+                  logoUrl: 'https://example.com/mu.png',
+                },
+                quizzes: [],
               },
+              message: 'Operation successful',
             },
           },
         },
@@ -63,9 +76,9 @@ export const SW: Record<string, SwaggerEndpointConfig> = {
           'application/json': {
             example: {
               statusCode: 400,
-              message: 'Invalid input',
-              error: 'Bad Request',
               data: null,
+              message: 'Validation failed (expected name to be non-empty)',
+              error: 'Bad Request',
             },
           },
         },
@@ -84,16 +97,35 @@ export const SW: Record<string, SwaggerEndpointConfig> = {
         type: ResponseDto,
         content: {
           'application/json': {
-            schema: {
-              type: 'object',
-              properties: {
-                statusCode: { type: 'number', example: 200 },
-                data: {
-                  type: 'array',
-                  items: { $ref: '#/components/schemas/CreateEventDto' },
+            example: {
+              statusCode: 200,
+              data: [
+                {
+                  id: 1,
+                  name: 'Manchester City vs Manchester United',
+                  startTime: '2025-04-01T15:00:00Z',
+                  info: 'Answer 5/5 questions and win 50 USDT',
+                  sportType: 'football',
+                  homeTeam: {
+                    name: 'Manchester City',
+                    country: 'England',
+                    logoUrl: 'https://example.com/mc.png',
+                  },
+                  awayTeam: {
+                    name: 'Manchester United',
+                    country: 'England',
+                    logoUrl: 'https://example.com/mu.png',
+                  },
+                  quizzes: [
+                    {
+                      id: 1,
+                      question: 'Who will win?',
+                      options: ['Manchester City', 'Manchester United', 'Draw'],
+                    },
+                  ],
                 },
-                message: { type: 'string', example: 'Events fetched' },
-              },
+              ],
+              message: 'Operation successful',
             },
           },
         },
@@ -112,16 +144,15 @@ export const SW: Record<string, SwaggerEndpointConfig> = {
         type: ResponseDto,
         content: {
           'application/json': {
-            schema: {
-              type: 'object',
-              properties: {
-                statusCode: { type: 'number', example: 201 },
-                data: {
-                  type: 'object',
-                  $ref: '#/components/schemas/CreateQuizDto',
-                },
-                message: { type: 'string', example: 'Quiz created' },
+            example: {
+              statusCode: 201,
+              data: {
+                id: 1,
+                question: 'Who will win?',
+                options: ['Manchester City', 'Manchester United', 'Draw'],
+                event: { id: 1 },
               },
+              message: 'Operation successful',
             },
           },
         },
@@ -149,9 +180,9 @@ export const SW: Record<string, SwaggerEndpointConfig> = {
           'application/json': {
             example: {
               statusCode: 400,
-              message: 'Invalid input',
-              error: 'Bad Request',
               data: null,
+              message: 'Validation failed (expected options to be non-empty)',
+              error: 'Bad Request',
             },
           },
         },
@@ -170,16 +201,23 @@ export const SW: Record<string, SwaggerEndpointConfig> = {
         type: ResponseDto,
         content: {
           'application/json': {
-            schema: {
-              type: 'object',
-              properties: {
-                statusCode: { type: 'number', example: 200 },
-                data: {
-                  type: 'array',
-                  items: { $ref: '#/components/schemas/CreateQuizDto' },
+            example: {
+              statusCode: 200,
+              data: [
+                {
+                  id: 1,
+                  question: 'Who will win?',
+                  options: ['Manchester City', 'Manchester United', 'Draw'],
+                  event: { id: 1 },
                 },
-                message: { type: 'string', example: 'Quizzes fetched' },
-              },
+                {
+                  id: 2,
+                  question: 'Number of goals?',
+                  options: ['0', '1', '2', '3'],
+                  event: { id: 1 },
+                },
+              ],
+              message: 'Operation successful',
             },
           },
         },
@@ -203,7 +241,7 @@ export const SW: Record<string, SwaggerEndpointConfig> = {
   },
   submitAnswer: {
     operation: {
-      summary: 'Submit a user answer',
+      summary: 'Submit user answers',
       description:
         'Records a user’s answers to an event’s quiz. Accepts all data by default (validationLevel=none). Use validationLevel=moderate or strict for optional checks.',
       parameters: [
@@ -228,26 +266,13 @@ export const SW: Record<string, SwaggerEndpointConfig> = {
         type: ResponseDto,
         content: {
           'application/json': {
-            schema: {
-              type: 'object',
-              properties: {
-                statusCode: { type: 'number', example: 201 },
-                data: {
-                  type: 'object',
-                  properties: {
-                    message: {
-                      type: 'string',
-                      example: 'Answers saved successfully',
-                    },
-                    warnings: {
-                      type: 'array',
-                      items: { type: 'string' },
-                      example: [],
-                    },
-                  },
-                },
-                message: { type: 'string', example: 'Operation successful' },
+            example: {
+              statusCode: 201,
+              data: {
+                message: 'All answers saved successfully',
+                warnings: [],
               },
+              message: 'Operation successful',
             },
           },
         },
@@ -258,29 +283,16 @@ export const SW: Record<string, SwaggerEndpointConfig> = {
         type: ResponseDto,
         content: {
           'application/json': {
-            schema: {
-              type: 'object',
-              properties: {
-                statusCode: { type: 'number', example: 201 },
-                data: {
-                  type: 'object',
-                  properties: {
-                    message: {
-                      type: 'string',
-                      example: 'Answers saved with warnings',
-                    },
-                    warnings: {
-                      type: 'array',
-                      items: { type: 'string' },
-                      example: [
-                        'Not all questions were answered',
-                        'Invalid answer format at position 1',
-                      ],
-                    },
-                  },
-                },
-                message: { type: 'string', example: 'Operation successful' },
+            example: {
+              statusCode: 201,
+              data: {
+                message: 'All answers saved with warnings',
+                warnings: [
+                  'Not all questions were answered',
+                  'Invalid answer format at position 1',
+                ],
               },
+              message: 'Operation successful',
             },
           },
         },
@@ -316,6 +328,21 @@ export const SW: Record<string, SwaggerEndpointConfig> = {
         },
       },
       {
+        status: HttpStatus.FORBIDDEN,
+        description: 'Event has started, quiz closed',
+        type: ResponseDto,
+        content: {
+          'application/json': {
+            example: {
+              statusCode: 403,
+              data: null,
+              message: 'Event has started, quiz is closed',
+              error: 'EVENT_CLOSED',
+            },
+          },
+        },
+      },
+      {
         status: HttpStatus.CONFLICT,
         description: 'Duplicate submission',
         type: ResponseDto,
@@ -346,12 +373,7 @@ export function setupSwagger(app: INestApplication) {
     .addTag('answers')
     .build();
   const document = SwaggerModule.createDocument(app, config, {
-    extraModels: [
-      CreateEventDto,
-      CreateQuizDto,
-      CreateAnswerDto,
-      AnswerItemDto,
-    ],
+    extraModels: [CreateEventDto, TeamDto, CreateQuizDto, CreateAnswerDto],
   });
   SwaggerModule.setup('api/docs', app, document);
 }
