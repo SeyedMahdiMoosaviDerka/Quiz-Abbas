@@ -1,28 +1,34 @@
-export interface UserAnswer {
-  id: string;
-  eventId: string;
-  answer: string;
-}
-
 export interface Team {
   name: string;
   country: string;
-  logo?: string;
+  logoUrl?: string;
 }
-export interface Questions {
-  title: string;
-  answers: Array<{
-    value: string;
-    label: string;
-  }>;
+
+export interface Quiz {
+  id: number;
+  question: string;
+  options: string[];
 }
+
 export interface Event {
-  id: string;
-  title: string;
-  subtitle: string;
+  id: number;
+  name: string;
+  info: string;
+  startTime: string;
+  sportType?: string;
   homeTeam: Team;
   awayTeam: Team;
-  questions: Questions[];
+  quizzes: Quiz[];
   backgroundImage?: string;
-  userAnswers: UserAnswer[];
+}
+
+export interface UserAnswer {
+  questionIndex: number;
+  answer: string;
+}
+
+export interface AnswerSubmission {
+  userId: string;
+  eventId: number;
+  answers: UserAnswer[];
 }

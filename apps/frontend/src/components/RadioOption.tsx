@@ -1,32 +1,48 @@
 import React from 'react';
+import { cn } from '../lib/utils';
 
 interface RadioOptionProps {
+  name: string;
   value: string;
   label: string;
-  isSelected: boolean;
+  checked: boolean;
   onChange: (value: string) => void;
+  className?: string;
 }
 
 const RadioOption: React.FC<RadioOptionProps> = ({
+  name,
   value,
   label,
-  isSelected,
+  checked,
   onChange,
+  className,
 }) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      onChange(value);
+    }
+  };
+
   return (
-    <div
-      className={`flex items-center justify-center p-3 rounded-[10px] mt-2
-                  ${
-                    isSelected
-                      ? 'bg-primary text-white'
-                      : 'bg-black/40 text-white hover:bg-green-500/20 transition-all'
-                  }
-                  cursor-pointer`}
-      onClick={() => onChange(value)}
-      data-testid={`radio-option-${value}`}
+    <label
+      className={cn(
+        'flex items-center p-2 rounded-lg cursor-pointer border border-gray-600 hover:bg-gray-700 transition-colors',
+        checked ? 'bg-primary text-white' : 'bg-gray-800 text-gray-200',
+        className
+      )}
     >
+      <input
+        type="radio"
+        name={name}
+        value={value}
+        checked={checked}
+        onChange={handleChange}
+        className="hidden"
+        aria-label={label}
+      />
       <span className="text-sm">{label}</span>
-    </div>
+    </label>
   );
 };
 

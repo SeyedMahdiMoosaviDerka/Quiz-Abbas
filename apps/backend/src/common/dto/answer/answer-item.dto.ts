@@ -8,12 +8,12 @@ export class AnswerItemDto {
     example: mockData.createAnswerDto.answers[0].questionIndex,
   })
   @IsNumber()
-  questionIndex: number;
+  questionIndex!: number;
 
   @ApiProperty({
     description: 'User’s answer to the corresponding question',
     example: mockData.createAnswerDto.answers[0].answer,
   })
   @IsString()
-  answer: string;
+  answer!: string;
 }

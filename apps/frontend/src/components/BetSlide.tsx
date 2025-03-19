@@ -1,86 +1,80 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TeamDisplay from './TeamDisplay';
 import RadioGroup from './RadioGroup';
-import { Questions, Team } from '../types';
+import { cn } from '../lib/utils';
+import { useQuiz } from '../contexts/QuizContext';
+import { Team } from '../types';
 
-// Using Event type for props
-type BetSlideProps = {
-  data: { title: string; subtitle: string; homeTeam: Team; awayTeam: Team };
-  question: Questions;
-  backgroundImage?: string;
-};
+export interface BetSlideProps {
+  id: number;
+  eventId: number;
+  title: string;
+  homeTeam: Team;
+  awayTeam: Team;
+  options: string[];
+  isLast?: boolean;
+  onNext: () => void;
+  onSubmit: () => void;
+}
 
 const BetSlide: React.FC<BetSlideProps> = ({
-  data,
-  question,
-  backgroundImage = '',
+  id,
+  eventId,
+  title,
+  homeTeam,
+  awayTeam,
+  options,
+  isLast = false,
+  onNext,
+  onSubmit,
 }) => {
-  const [selectedOption, setSelectedOption] = useState<string>('');
+  const { answers, setAnswer } = useQuiz();
+  const answerKey = `${eventId}-${id}`;
+  const selectedAnswer = answers[answerKey] || '';
+
+  const handleAnswerChange = (value: string) => {
+    setAnswer(eventId, id, value);
+    if (isLast) onSubmit();
+    else onNext();
+  };
 
   return (
-    <div className="match-card w-full min-h-[450px] h-auto sm:h-[500px] relative pb-24 bg-gray-600 rounded-xl">
-      {/* Content overlay */}
-      <div className="relative z-10 flex flex-col h-full">
-        {/* Top section with promo text */}
-        <div className="text-center p-3 sm:p-4 mt-2">
-          <div className="inline-block bg-black/50 px-2 sm:px-3 py-1 rounded-full text-xs text-white mb-1">
-            {data.subtitle}
-          </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-white">
-            {data.title}
-          </h1>
+    <div className="w-full max-w-md mx-auto">
+      <div className="bg-background rounded-lg shadow-lg p-6 text-foreground">
+        <div className="flex justify-between items-center mb-4">
+          <TeamDisplay
+            teamName={homeTeam.name}
+            country={homeTeam.country}
+            logo={homeTeam.logoUrl}
+          />
+          <span className="text-muted-foreground">vs</span>
+          <TeamDisplay
+            teamName={awayTeam.name}
+            country={awayTeam.country}
+            logo={awayTeam.logoUrl}
+            isRight
+          />
         </div>
-
-        {/* Main content area */}
-        <div className="flex-1 flex flex-col">
-          {/* Teams section */}
-          <div className="flex justify-between items-start px-4 sm:px-6 py-3 sm:py-4">
-            <TeamDisplay
-              teamName={data.homeTeam.name}
-              country={data.homeTeam.country}
-            />
-
-            {/* Center prize display */}
-            <div className="flex flex-col items-center mx-2">
-              <div className="text-center">
-                <div className="text-4xl sm:text-5xl font-bold text-primary leading-none tracking-tight">
-                  50.00
-                </div>
-                <div className="text-lg sm:text-xl text-white font-bold -mt-1">
-                  USDT
-                </div>
-              </div>
-            </div>
-
-            <TeamDisplay
-              teamName={data.awayTeam.name}
-              country={data.awayTeam.country}
-              isRight
-            />
-          </div>
-
-          {/* Flexible space that grows or shrinks based on available height */}
-          <div className="flex-1"></div>
-
-          {/* Options section */}
-          <div className="p-3 pt-4 sm:p-4 md:p-6 bg-black/20  rounded-t-[50px] shadow-lg shadow-gray-900/30">
-            <div className="flex items-center justify-center mb-3">
-              <div className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center bg-primary rounded-full mr-2">
-                <span className="text-xs" role="img" aria-label="ball">
-                  ⚽
-                </span>
-              </div>
-              <h3 className="text-white font-medium text-sm sm:text-base">
-                {question.title}
-              </h3>
-            </div>
-
-            <RadioGroup
-              options={question.answers}
-              value={selectedOption}
-              onChange={setSelectedOption}
-            />
-          </div>
+        <RadioGroup
+          label={title}
+          name={`question-${id}`}
+          options={options}
+          value={selectedAnswer}
+          onChange={handleAnswerChange}
+        />
+        <div className="mt-6 flex justify-end">
+          <button
+            onClick={isLast ? onSubmit : onNext}
+            disabled={!selectedAnswer}
+            className={cn(
+              'px-6 py-2 rounded-lg transition-colors duration-200',
+              selectedAnswer
+                ? 'bg-primary text-foreground hover:bg-primary/80'
+                : 'bg-muted text-muted-foreground cursor-not-allowed'
+            )}
+          >
+            {isLast ? 'Submit Quiz' : 'Next'}
+          </button>
         </div>
       </div>
     </div>

@@ -1,36 +1,39 @@
 import React from 'react';
 import RadioOption from './RadioOption';
-
-interface Option {
-  value: string;
-  label: string;
-}
+import { cn } from '../lib/utils';
 
 interface RadioGroupProps {
-  options: Option[];
+  label: string;
+  name: string;
+  options: string[];
   value: string;
   onChange: (value: string) => void;
+  className?: string;
 }
 
 const RadioGroup: React.FC<RadioGroupProps> = ({
+  label,
+  name,
   options,
   value,
   onChange,
+  className,
 }) => {
   return (
-    <div
-      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"
-      data-testid="radio-group"
-    >
-      {options.map((option) => (
-        <RadioOption
-          key={option.value}
-          value={option.value}
-          label={option.label}
-          isSelected={value === option.value}
-          onChange={onChange}
-        />
-      ))}
+    <div className={cn('space-y-2', className)}>
+      <label className="block text-sm font-medium text-white">{label}</label>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+        {options.map((option) => (
+          <RadioOption
+            key={option}
+            name={name}
+            value={option}
+            label={option}
+            checked={value === option}
+            onChange={onChange}
+          />
+        ))}
+      </div>
     </div>
   );
 };

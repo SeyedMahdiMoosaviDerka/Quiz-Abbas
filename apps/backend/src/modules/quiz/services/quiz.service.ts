@@ -15,18 +15,17 @@ export class QuizService {
     private eventRepository: Repository<Event>
   ) {}
 
-  async create(dto: CreateQuizDto): Promise<Quiz> {
+  async create(dto: CreateQuizDto): Promise<Quiz | undefined> {
     const event = await this.eventRepository.findOneBy({ id: dto.eventId });
-    if (!event) exceptions.event.notFound();
-
-    const questions = [
-      {
-        title: dto.question,
-        options: dto.answers,
-      },
-    ];
-    const quiz = this.quizRepository.create({ questions, event });
-    return this.quizRepository.save(quiz);
+    if (event) {
+      const quiz = this.quizRepository.create({
+        question: dto.question,
+        options: dto.options,
+        event,
+      });
+      return this.quizRepository.save(quiz);
+    }
+    exceptions.event.notFound();
   }
 
   async findByEvent(eventId: number): Promise<Quiz[]> {
