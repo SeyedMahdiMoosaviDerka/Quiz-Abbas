@@ -1,13 +1,11 @@
-// frontend/src/data/dummyData.ts
 import { Event } from '../types';
 
-// Mock events simulating backend response
 export const dummyEvents: Event[] = [
   {
     id: 1,
     name: 'WIN A 50.00 USDT FREE BET',
     info: 'Serie A - Sunday 20:45',
-    startTime: '2025-03-20T20:45:00Z', // Future date for countdown testing
+    startTime: '2025-03-20T20:45:00Z',
     sportType: 'Football',
     homeTeam: {
       name: 'Juventus Turin',
@@ -67,7 +65,7 @@ export const dummyEvents: Event[] = [
     id: 3,
     name: 'Tennis Grand Slam Bet',
     info: 'Wimbledon - Saturday 14:00',
-    startTime: '2025-03-19T14:00:00Z', // Past date to test "Quiz Closed"
+    startTime: '2025-03-19T14:00:00Z',
     sportType: 'Tennis',
     homeTeam: {
       name: 'Novak Djokovic',
@@ -90,14 +88,13 @@ export const dummyEvents: Event[] = [
   },
 ];
 
-// Mock admin data with answers (for Panel.tsx)
 export interface EventWithAnswers extends Event {
   answers: { id: string; answer: string }[];
 }
 
 export const dummyEventsWithAnswers: EventWithAnswers[] = [
   {
-    ...dummyEvents[0], // Juventus vs Napoli
+    ...dummyEvents[0],
     answers: [
       { id: 'user1', answer: '2' },
       { id: 'user2', answer: 'Player A' },
@@ -105,14 +102,14 @@ export const dummyEventsWithAnswers: EventWithAnswers[] = [
     ],
   },
   {
-    ...dummyEvents[1], // Lakers vs Celtics
+    ...dummyEvents[1],
     answers: [
       { id: 'user4', answer: '200-220' },
       { id: 'user5', answer: 'LeBron James' },
     ],
   },
   {
-    ...dummyEvents[2], // Djokovic vs Nadal
+    ...dummyEvents[2],
     answers: [
       { id: 'user6', answer: 'Over 3 hours' },
       { id: 'user7', answer: '2-3 hours' },

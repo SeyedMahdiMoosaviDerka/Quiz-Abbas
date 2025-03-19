@@ -40,13 +40,13 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({
   const setCurrentEvent = useCallback(
     (event: Event | null) => {
       setCurrentEventState(event);
-      if (event && !userId) setUserId(uuidv4()); // Generate ID when quiz starts
+      if (event && !userId) setUserId(uuidv4());
     },
     [setUserId]
   );
 
   useEffect(() => {
-    if (!currentEvent && !submittedEvents.size) setUserId(uuidv4()); // Reset ID if no quiz in progress
+    if (!currentEvent && !submittedEvents.size) setUserId(uuidv4());
   }, [currentEvent, submittedEvents, setUserId]);
 
   const setAnswer = useCallback(
@@ -76,7 +76,6 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({
       setSubmittedEvents((prev) => new Set(prev).add(eventId));
       setCurrentEvent(null);
       setAnswers({});
-      setUserId(uuidv4()); // Reset ID after submission
     },
     [
       userId,

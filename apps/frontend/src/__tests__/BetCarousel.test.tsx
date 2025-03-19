@@ -2,7 +2,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import BetCarousel from '../components/BetCarousel';
 import { Event } from '../types';
 
-// Mock QuizContext to avoid context errors
 jest.mock('../contexts/QuizContext', () => ({
   useQuiz: () => ({
     currentEvent: null,
@@ -16,7 +15,6 @@ jest.mock('../contexts/QuizContext', () => ({
   }),
 }));
 
-// Mock BetSlide component to match how BetCarousel uses it
 jest.mock('../components/BetSlide', () => {
   return function MockBetSlide({ id, title }: { id: string; title: string }) {
     return <div data-testid={`bet-slide-${id}`}>{title}</div>;

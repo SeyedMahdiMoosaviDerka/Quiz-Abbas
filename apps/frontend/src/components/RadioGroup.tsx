@@ -5,7 +5,7 @@ import { cn } from '../lib/utils';
 interface RadioGroupProps {
   label: string;
   name: string;
-  options: string[]; // Matches Quiz.options
+  options: string[];
   value: string;
   onChange: (value: string) => void;
   className?: string;
@@ -28,7 +28,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
             key={option}
             name={name}
             value={option}
-            label={option} // Same string used for both
+            label={option}
             checked={value === option}
             onChange={onChange}
           />

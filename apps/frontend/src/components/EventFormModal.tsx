@@ -1,4 +1,3 @@
-// frontend/src/components/EventFormModal.tsx
 import React, { useState } from 'react';
 import { EventWithAnswers } from '../api/events';
 

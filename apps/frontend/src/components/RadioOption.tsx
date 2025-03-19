@@ -4,7 +4,7 @@ import { cn } from '../lib/utils';
 interface RadioOptionProps {
   name: string;
   value: string;
-  label: string; // Kept separate for flexibility, but can match value
+  label: string;
   checked: boolean;
   onChange: (value: string) => void;
   className?: string;

@@ -1,4 +1,3 @@
-// frontend/src/pages/Panel.tsx
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '../components/ThemeProvider';
 import {

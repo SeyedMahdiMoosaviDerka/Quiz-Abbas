@@ -1,8 +1,7 @@
-// frontend/src/types/index.ts
 export interface Team {
   name: string;
   country: string;
-  logoUrl?: string; // Optional, matches backend
+  logoUrl?: string;
 }
 
 export interface Quiz {
@@ -12,19 +11,19 @@ export interface Quiz {
 }
 
 export interface Event {
-  id: number; // Changed from string to number to match backend
-  name: string; // Renamed from title to match backend
-  info: string; // Renamed from subtitle to match backend
-  startTime: string; // ISO string, will be parsed as needed
-  sportType?: string; // Optional, matches backend
+  id: number;
+  name: string;
+  info: string;
+  startTime: string;
+  sportType?: string;
   homeTeam: Team;
   awayTeam: Team;
-  quizzes: Quiz[]; // Renamed from questions to match backend
-  backgroundImage?: string; // Frontend-specific, not from backend
+  quizzes: Quiz[];
+  backgroundImage?: string;
 }
 
 export interface UserAnswer {
-  questionIndex: number; // Matches backend Answer entity
+  questionIndex: number;
   answer: string;
 }
 

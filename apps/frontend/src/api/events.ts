@@ -1,8 +1,7 @@
-// frontend/src/api/events.ts
 import { Event, AnswerSubmission } from '../types';
 import { dummyEvents, dummyEventsWithAnswers } from '../data/dummyData';
 
-const ENVIRONMENT = 'dev'; // Switch to 'production' for real API
+const ENVIRONMENT = 'dev';
 
 const API_URL = 'http://localhost:3000/api';
 

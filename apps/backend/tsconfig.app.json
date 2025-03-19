@@ -17,8 +17,8 @@
   "emitDecoratorMetadata": true,
   "experimentalDecorators": true,
   "noEmitHelpers": false,
-  "noImplicitAny": true, // Stricter type checking
-  "strict": true, // Enable all strict type-checking options
+  "noImplicitAny": true,  
+  "strict": true,
   "sourceMap": false
 },
   "include": ["src/**/*.ts"],

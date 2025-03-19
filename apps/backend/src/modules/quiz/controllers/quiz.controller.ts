@@ -10,11 +10,11 @@ import { QuizService } from '../services/quiz.service';
 import { CreateQuizDto } from '@common/dto/quiz/create-quiz.dto';
 import { ApiDocDecorator } from '@configs/swagger/decorator';
 
-@Controller('events/:eventId/quizzes')
+@Controller('quiz')
 export class QuizController {
   constructor(private readonly quizService: QuizService) {}
 
-  @Post()
+  @Post(':eventId')
   @ApiDocDecorator('createQuiz')
   create(
     @Param('eventId', ParseIntPipe) eventId: number,
