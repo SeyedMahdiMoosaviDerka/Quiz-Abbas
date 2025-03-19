@@ -1,5 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { Quiz } from '@database/quiz/quiz.entity';
+import { Event } from '../event/event.entity';
+
+interface UserAnswer {
+  questionIndex: number;
+  answer: string;
+}
 
 @Entity()
 export class Answer {
@@ -7,17 +12,11 @@ export class Answer {
   id: number;
 
   @Column()
-  userId: string; // Could be a UUID or username
+  userId: string;
 
-  @ManyToOne(() => Quiz, (quiz) => quiz.userAnswers)
-  quiz: Quiz;
+  @ManyToOne(() => Event)
+  event: Event;
 
-  @Column()
-  selectedAnswer: number; // Index of user's chosen option
-
-  @Column({ default: false })
-  isCorrect: boolean;
-
-  @Column({ nullable: true })
-  reward: number; // e.g., USDT amount, null if not rewarded
+  @Column('json')
+  answers: UserAnswer[];
 }
