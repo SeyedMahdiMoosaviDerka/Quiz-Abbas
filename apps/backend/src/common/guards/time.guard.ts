@@ -1,9 +1,9 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { EventsService } from '@modules/event/services/event.service';
+import { EventService } from '@modules/event/services/event.service';
 
 @Injectable()
 export class TimeGuard implements CanActivate {
-  constructor(private readonly eventsService: EventsService) {}
+  constructor(private readonly eventsService: EventService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();

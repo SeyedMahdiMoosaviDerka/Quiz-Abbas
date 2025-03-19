@@ -48,6 +48,7 @@ The task had specific requirements for the backend and frontend, and I’ve made
   - Uses **PostgreSQL** with **TypeORM** to manage entities like `Event`, `Quiz`, and `Answer`.
   - A `seed.ts` script populates the database with sample data—think football games and tennis matches—so it’s ready to roll out of the box.
   - Answers are tied to a random user ID (no login required), stored in the database when submitted.
+  - if you dont have access to PostgreSQL you can set DEVENVIRONMENT in frontend/src/api/event to see front part as well with dummy data
 
 - **API**:
 

@@ -1,7 +1,7 @@
 import { Event, AnswerSubmission } from '../types';
 import { dummyEvents, dummyEventsWithAnswers } from '../data/dummyData';
 
-const ENVIRONMENT = 'dev';
+const DEVENVIRONMENT = false;
 
 const API_URL = 'http://localhost:3000/api';
 
@@ -10,7 +10,7 @@ export interface EventWithAnswers extends Event {
 }
 
 export const fetchEvents = async (): Promise<Event[]> => {
-  if (ENVIRONMENT === 'dev') {
+  if (DEVENVIRONMENT) {
     return dummyEvents;
   }
   const response = await fetch(`${API_URL}/events`);
@@ -19,7 +19,7 @@ export const fetchEvents = async (): Promise<Event[]> => {
 };
 
 export const fetchEventsWithAnswers = async (): Promise<EventWithAnswers[]> => {
-  if (ENVIRONMENT === 'dev') {
+  if (DEVENVIRONMENT) {
     return dummyEventsWithAnswers;
   }
   const response = await fetch(`${API_URL}/admin/events-with-answers`);
@@ -30,7 +30,7 @@ export const fetchEventsWithAnswers = async (): Promise<EventWithAnswers[]> => {
 export const createEvent = async (
   eventData: Omit<Event, 'id' | 'quizzes'>
 ): Promise<Event> => {
-  if (ENVIRONMENT === 'dev') {
+  if (DEVENVIRONMENT) {
     const newEvent = { ...eventData, id: dummyEvents.length + 1, quizzes: [] };
     dummyEvents.push(newEvent);
     return newEvent;
@@ -48,7 +48,7 @@ export const updateEvent = async (
   id: number,
   eventData: Partial<Omit<Event, 'id'>>
 ): Promise<Event> => {
-  if (ENVIRONMENT === 'dev') {
+  if (DEVENVIRONMENT) {
     const eventIndex = dummyEvents.findIndex((e) => e.id === id);
     if (eventIndex === -1) throw new Error('Event not found');
     dummyEvents[eventIndex] = { ...dummyEvents[eventIndex], ...eventData };
@@ -64,7 +64,7 @@ export const updateEvent = async (
 };
 
 export const deleteEvent = async (id: number): Promise<void> => {
-  if (ENVIRONMENT === 'dev') {
+  if (DEVENVIRONMENT) {
     const eventIndex = dummyEvents.findIndex((e) => e.id === id);
     if (eventIndex === -1) throw new Error('Event not found');
     dummyEvents.splice(eventIndex, 1);
@@ -79,7 +79,7 @@ export const deleteEvent = async (id: number): Promise<void> => {
 export const submitAnswers = async (
   submission: AnswerSubmission
 ): Promise<void> => {
-  if (ENVIRONMENT === 'dev') {
+  if (DEVENVIRONMENT) {
     console.log('Answers submitted (dev mode):', submission);
     return;
   }

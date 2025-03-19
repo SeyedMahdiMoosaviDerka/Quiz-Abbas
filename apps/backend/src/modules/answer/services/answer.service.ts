@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Answer } from '@database/answer/answer.entity';
 import { CreateAnswerDto } from '@common/dto/answer/create-answer.dto';
-import { EventsService } from '../../event/services/event.service';
+import { EventService } from '../../event/services/event.service';
 import { exceptions } from '@common/exceptions';
 
 interface ValidationResult {
@@ -14,7 +14,7 @@ interface ValidationResult {
 export class AnswerService {
   constructor(
     @InjectRepository(Answer) private answersRepository: Repository<Answer>,
-    private eventsService: EventsService
+    private eventService: EventService
   ) {}
 
   private validateAnswers(
@@ -73,7 +73,7 @@ export class AnswerService {
     });
     if (existingAnswer) throw exceptions.answer.duplicateSubmission();
 
-    const event = await this.eventsService.findOne(dto.eventId);
+    const event = await this.eventService.findOne(dto.eventId);
     if (!event) throw exceptions.event.notFound();
     const now = new Date();
     if (now < event.startTime) throw exceptions.answer.eventNotStarted();
