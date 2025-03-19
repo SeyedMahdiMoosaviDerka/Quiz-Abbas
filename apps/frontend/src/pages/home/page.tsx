@@ -1,11 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import PickAWinHeader from '../components/PickAWinHeader';
-import EventRow from '../components/EventRow';
-import BetCarousel from '../components/BetCarousel';
-import { Event } from '../types';
-import SummaryCard from '../components/SummeryCard';
+import PickAWinHeader from '../../components/PickAWinHeader';
+import EventRow from '../../components/EventRow';
+import BetCarousel from '../../components/BetCarousel';
+import { Event } from '../../types';
 
 // Mock data for events
 const mockEvents: Event[] = [
@@ -187,65 +186,50 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="w-full max-w-screen-lg mx-auto mb-[50px]">
-        <PickAWinHeader title="Pick 4 Win" />
+    <div>
+      {!selectedEvent ? (
+        // Show list of events
+        <div className="px-4 py-6">
+          <h1 className="text-xl font-bold mb-6 text-foreground">
+            Available Events
+          </h1>
 
-        {!selectedEvent ? (
-          // Show list of events
-          <div className="px-4 py-6">
-            <h1 className="text-xl font-bold mb-6 text-foreground">
-              Available Events
-            </h1>
-
-            <div className="space-y-4">
-              {mockEvents.map((event, index) => (
-                <EventRow
-                  key={index}
-                  event={event}
-                  onSelect={handleSelectEvent}
-                />
-              ))}
-            </div>
+          <div className="space-y-4">
+            {mockEvents.map((event, index) => (
+              <EventRow
+                key={index}
+                event={event}
+                onSelect={handleSelectEvent}
+              />
+            ))}
           </div>
-        ) : (
-          // Show selected event with betting options
-          <div className="px-4 py-2">
-            <button
-              onClick={handleBackToList}
-              className="mb-4 flex items-center text-sm text-foreground/80"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 mr-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-              Back to events
-            </button>
-
-            <BetCarousel event={selectedEvent} />
-          </div>
-        )}
-      </div>
-
-      {/* Bottom navigation */}
-      <div className="fixed z-50 bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm py-2 sm:py-3 px-2 sm:px-4">
-        <div className="max-w-screen-lg mx-auto flex items-center justify-between">
-          <div></div>
-          <button className="bg-black/50 hover:bg-black/70 text-xs text-white/80 rounded-full px-3 py-1 transition-colors">
-            How to play
-          </button>
         </div>
-      </div>
+      ) : (
+        <div className="px-4 py-2">
+          <button
+            onClick={handleBackToList}
+            className="mb-4 flex items-center text-sm text-foreground/80"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 mr-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            Back to events
+          </button>
+
+          <BetCarousel event={selectedEvent} />
+        </div>
+      )}
     </div>
   );
 }

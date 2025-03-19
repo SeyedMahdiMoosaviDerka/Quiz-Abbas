@@ -1,8 +1,12 @@
 import { StrictMode } from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import * as ReactDOM from 'react-dom/client';
-import App from './app/home';
+
 import { ThemeProvider } from './components/ThemeProvider';
+import { BrowserRouter, Route, Routes } from 'react-router';
+
+import Home from './pages/home/page';
+import PanelPage from './pages/panel/page';
+import MainLayout from './app/layout/main-layout';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -10,12 +14,15 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <StrictMode>
-    <BrowserRouter>
-      <ThemeProvider>
-        <main className="min-h-screen bg-background">
-          <App />
-        </main>
-      </ThemeProvider>
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/panel" element={<PanelPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   </StrictMode>
 );
