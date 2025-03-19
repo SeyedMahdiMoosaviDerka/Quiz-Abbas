@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router';
-import PickAWinHeader from '../../components/PickAWinHeader';
+import PickAWinHeader from '../../components/ui/PickAWinHeader';
 
 export default function MainLayout() {
   return (

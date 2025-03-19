@@ -1,28 +1,35 @@
-export interface UserAnswer {
-  id: string;
-  eventId: string;
-  answer: string;
-}
-
+// frontend/src/types/index.ts
 export interface Team {
   name: string;
   country: string;
-  logo?: string;
+  logoUrl?: string; // Optional, matches backend
 }
-export interface Questions {
-  title: string;
-  answers: Array<{
-    value: string;
-    label: string;
-  }>;
+
+export interface Quiz {
+  id: number;
+  question: string;
+  options: string[];
 }
+
 export interface Event {
-  id: string;
-  title: string;
-  subtitle: string;
+  id: number; // Changed from string to number to match backend
+  name: string; // Renamed from title to match backend
+  info: string; // Renamed from subtitle to match backend
+  startTime: string; // ISO string, will be parsed as needed
+  sportType?: string; // Optional, matches backend
   homeTeam: Team;
   awayTeam: Team;
-  questions: Questions[];
-  backgroundImage?: string;
-  userAnswers: UserAnswer[];
+  quizzes: Quiz[]; // Renamed from questions to match backend
+  backgroundImage?: string; // Frontend-specific, not from backend
+}
+
+export interface UserAnswer {
+  questionIndex: number; // Matches backend Answer entity
+  answer: string;
+}
+
+export interface AnswerSubmission {
+  userId: string;
+  eventId: number;
+  answers: UserAnswer[];
 }

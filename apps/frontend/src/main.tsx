@@ -1,28 +1,18 @@
-import { StrictMode } from 'react';
-import * as ReactDOM from 'react-dom/client';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from './components/ui/ThemeProvider';
+import { QuizProvider } from './contexts/QuizContext';
+import App from './app/app';
 
-import { ThemeProvider } from './components/ThemeProvider';
-import { BrowserRouter, Route, Routes } from 'react-router';
-
-import Home from './pages/home/page';
-import PanelPage from './pages/panel/page';
-import MainLayout from './app/layout/main-layout';
-
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-
-root.render(
-  <StrictMode>
-    <ThemeProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/panel" element={<PanelPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
-  </StrictMode>
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <ThemeProvider>
+        <QuizProvider>
+          <App />
+        </QuizProvider>
+      </ThemeProvider>
+    </BrowserRouter>
+  </React.StrictMode>
 );
