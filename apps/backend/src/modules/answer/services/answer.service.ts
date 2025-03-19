@@ -19,27 +19,25 @@ export class AnswerService {
   ): Promise<{ warnings: string[] }> {
     const warnings: string[] = [];
     const event = await this.eventsService.findOne(createAnswerDto.eventId);
+    if (!event) throw new Error('Event not found');
+
     const quizQuestions = event.quiz.questions;
 
-    for (const userAnswer of createAnswerDto.answers) {
-      if (userAnswer.questionIndex >= quizQuestions.length) {
-        warnings.push(
-          `Invalid question index ${userAnswer.questionIndex} for event ${createAnswerDto.eventId}`
-        );
-        continue;
-      }
-
-      if (validationLevel === 'moderate' && !userAnswer.answer) {
-        warnings.push(`Question ${userAnswer.questionIndex} has no answer`);
-      } else if (
-        validationLevel === 'moderate' &&
-        !quizQuestions[userAnswer.questionIndex].options.includes(
-          userAnswer.answer
-        )
-      ) {
-        warnings.push(
-          `Invalid answer for question ${userAnswer.questionIndex}`
-        );
+    if (validationLevel === 'moderate') {
+      for (const userAnswer of createAnswerDto.answers) {
+        if (userAnswer.questionIndex >= quizQuestions.length) {
+          warnings.push(`Invalid question index ${userAnswer.questionIndex}`);
+          continue;
+        }
+        if (
+          !quizQuestions[userAnswer.questionIndex].options.includes(
+            userAnswer.answer
+          )
+        ) {
+          warnings.push(
+            `Invalid answer "${userAnswer.answer}" for question ${userAnswer.questionIndex}`
+          );
+        }
       }
     }
 
