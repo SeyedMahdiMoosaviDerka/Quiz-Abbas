@@ -2,13 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { AnswerService } from './answer.service';
 import { Answer } from '../../../database/answer/answer.entity';
-import { EventsService } from '../../event/services/event.service';
+import { EventService } from '../../event/services/event.service';
 import { Repository } from 'typeorm';
 
 describe('AnswerService', () => {
   let service: AnswerService;
   let answerRepository: Repository<Answer>;
-  let eventsService: EventsService;
+  let eventService: EventService;
 
   const mockEvent = {
     id: 1,
@@ -27,7 +27,7 @@ describe('AnswerService', () => {
     save: jest.fn().mockResolvedValue(mockAnswer),
   };
 
-  const mockEventsService = {
+  const mockEventService = {
     findOne: jest.fn().mockResolvedValue(mockEvent),
     isEventStarted: jest.fn().mockResolvedValue(true),
   };
@@ -37,7 +37,7 @@ describe('AnswerService', () => {
       providers: [
         AnswerService,
         { provide: getRepositoryToken(Answer), useValue: mockAnswerRepository },
-        { provide: EventsService, useValue: mockEventsService },
+        { provide: EventService, useValue: mockEventService },
       ],
     }).compile();
 
@@ -45,7 +45,7 @@ describe('AnswerService', () => {
     answerRepository = module.get<Repository<Answer>>(
       getRepositoryToken(Answer)
     );
-    eventsService = module.get<EventsService>(EventsService);
+    eventService = module.get<EventService>(EventService);
   });
 
   it('should be defined', () => {
@@ -60,8 +60,8 @@ describe('AnswerService', () => {
         answers: [{ questionIndex: 0, answer: 'A' }],
       };
       const result = await service.create(dto, 'none');
-      expect(eventsService.findOne).toHaveBeenCalledWith(1);
-      expect(eventsService.isEventStarted).toHaveBeenCalledWith(1);
+      expect(eventService.findOne).toHaveBeenCalledWith(1);
+      expect(eventService.isEventStarted).toHaveBeenCalledWith(1);
       expect(answerRepository.create).toHaveBeenCalledWith({
         userId: 'user1',
         event: mockEvent,
@@ -86,7 +86,7 @@ describe('AnswerService', () => {
     });
 
     it('should throw if event not found', async () => {
-      mockEventsService.findOne.mockResolvedValue(null);
+      mockEventService.findOne.mockResolvedValue(null);
       const dto = { userId: 'user1', eventId: 1, answers: [] };
       await expect(service.create(dto, 'none')).rejects.toThrow(
         'Event not found'
@@ -94,7 +94,7 @@ describe('AnswerService', () => {
     });
 
     it('should throw if event not started', async () => {
-      mockEventsService.isEventStarted.mockResolvedValue(false);
+      mockEventService.isEventStarted.mockResolvedValue(false);
       const dto = { userId: 'user1', eventId: 1, answers: [] };
       await expect(service.create(dto, 'none')).rejects.toThrow(
         'Event has not started yet'

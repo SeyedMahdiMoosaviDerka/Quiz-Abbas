@@ -1,6 +1,5 @@
 import React from 'react';
 import { EventWithAnswers } from '../api/events';
-import '@testing-library/jest-dom';
 interface AnswersModalProps {
   isOpen: boolean;
   onClose: () => void;

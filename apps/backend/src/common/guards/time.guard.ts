@@ -3,13 +3,13 @@ import { EventService } from '@modules/event/services/event.service';
 
 @Injectable()
 export class TimeGuard implements CanActivate {
-  constructor(private readonly eventsService: EventService) {}
+  constructor(private readonly eventService: EventService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const eventId = request.params.eventId || request.body.eventId;
     if (eventId) {
-      const event = await this.eventsService.findOne(+eventId);
+      const event = await this.eventService.findOne(+eventId);
       if (!event) return true; // Let controller handle not-found
       const now = new Date();
       if (now > event.startTime) {

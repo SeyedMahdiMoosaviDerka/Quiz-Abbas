@@ -1,6 +1,6 @@
 import React from 'react';
 import ThemeToggle from './ThemeToggle';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 interface PickAWinHeaderProps {
   title: string;

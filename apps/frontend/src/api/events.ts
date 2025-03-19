@@ -1,7 +1,7 @@
 import { Event, AnswerSubmission } from '../types';
 import { dummyEvents, dummyEventsWithAnswers } from '../data/dummyData';
 
-const DEVENVIRONMENT = false;
+const DEVENVIRONMENT = true;
 
 const API_URL = 'http://localhost:3000/api';
 
