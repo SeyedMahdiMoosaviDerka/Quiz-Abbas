@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TeamDisplay from './TeamDisplay';
 import RadioGroup from './RadioGroup';
-import { Event, Questions, Team } from '../types';
+import { Questions, Team } from '../types';
 
 // Using Event type for props
 type BetSlideProps = {
@@ -13,7 +13,7 @@ type BetSlideProps = {
 const BetSlide: React.FC<BetSlideProps> = ({
   data,
   question,
-  backgroundImage = 'https://same-assets.com/f/soccer-bg.jpg',
+  backgroundImage = '',
 }) => {
   const [selectedOption, setSelectedOption] = useState<string>('');
 
@@ -63,10 +63,12 @@ const BetSlide: React.FC<BetSlideProps> = ({
           <div className="flex-1"></div>
 
           {/* Options section */}
-          <div className="p-3 pt-4 sm:p-4 md:p-6 bg-black/60 rounded-t-xl">
+          <div className="p-3 pt-4 sm:p-4 md:p-6 bg-black/20  rounded-t-[50px] shadow-lg shadow-gray-900/30">
             <div className="flex items-center justify-center mb-3">
               <div className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center bg-primary rounded-full mr-2">
-                <span className="text-xs">⚽</span>
+                <span className="text-xs" role="img" aria-label="ball">
+                  ⚽
+                </span>
               </div>
               <h3 className="text-white font-medium text-sm sm:text-base">
                 {question.title}

@@ -76,6 +76,30 @@ module.exports = {
           '2xl': '1536px',
         },
       },
+      keyframes: {
+        blobBounce: {
+          '0%': { transform: 'translate(-100%, -100%) translate3d(0, 0, 0)' },
+          '25%': {
+            transform: 'translate(-100%, -100%) translate3d(100%, 0, 0)',
+          },
+          '50%': {
+            transform: 'translate(-100%, -100%) translate3d(100%, 100%, 0)',
+          },
+          '75%': {
+            transform: 'translate(-100%, -100%) translate3d(0, 100%, 0)',
+          },
+          '100%': { transform: 'translate(-100%, -100%) translate3d(0, 0, 0)' },
+        },
+      },
+      animation: {
+        blobBounce: 'blobBounce 5s infinite ease',
+      },
+      boxShadow: {
+        card: '20px 20px 60px #bebebe, -20px -20px 60px #ffffff',
+      },
+      backdropBlur: {
+        24: '24px',
+      },
     },
   },
   plugins: [],

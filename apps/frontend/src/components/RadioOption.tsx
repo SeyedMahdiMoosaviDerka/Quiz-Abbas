@@ -15,10 +15,12 @@ const RadioOption: React.FC<RadioOptionProps> = ({
 }) => {
   return (
     <div
-      className={`flex items-center justify-center p-3 rounded-lg
-                  ${isSelected
-                    ? 'bg-primary text-white'
-                    : 'bg-black/40 text-white hover:bg-black/50'}
+      className={`flex items-center justify-center p-3 rounded-[10px] mt-2
+                  ${
+                    isSelected
+                      ? 'bg-primary text-white'
+                      : 'bg-black/40 text-white hover:bg-green-500/20 transition-all'
+                  }
                   cursor-pointer`}
       onClick={() => onChange(value)}
       data-testid={`radio-option-${value}`}

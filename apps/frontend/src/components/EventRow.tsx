@@ -11,19 +11,12 @@ interface EventRowProps {
 const EventRow: React.FC<EventRowProps> = ({ event, onSelect }) => {
   return (
     <div
-      className="relative w-full h-80 sm:h-52 mb-4 p-4 rounded-xl overflow-hidden cursor-pointer"
+      className="relative w-full h-80 sm:h-52 mb-4 p-4 rounded-xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all duration-300 shadow-lg shadow-green-100 dark:shadow-none dark:border dark:border-gray-800 border-none"
       onClick={() => onSelect(event)}
     >
       {/* Background Image */}
       <div className="absolute inset-0 z-0 ">
-        <img
-          src={
-            event.backgroundImage ||
-            'https://same-assets.com/f/soccer-stadium-bg.jpg'
-          }
-          alt="Match background"
-          className="object-cover"
-        />
+        <img src={event.backgroundImage} alt="" className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/70"></div>
       </div>
 
@@ -43,7 +36,7 @@ const EventRow: React.FC<EventRowProps> = ({ event, onSelect }) => {
               <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-300 relative mt-1">
                 <img
                   src={event.homeTeam.logo}
-                  alt={`${event.homeTeam.name} logo`}
+                  alt={``}
                   className="object-contain"
                 />
               </div>
@@ -65,7 +58,7 @@ const EventRow: React.FC<EventRowProps> = ({ event, onSelect }) => {
               <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-300 relative mt-1">
                 <img
                   src={event.awayTeam.logo}
-                  alt={`${event.awayTeam.name} logo`}
+                  alt={``}
                   className="object-contain"
                 />
               </div>
@@ -77,7 +70,10 @@ const EventRow: React.FC<EventRowProps> = ({ event, onSelect }) => {
         <div className="flex justify-between flex-col sm:flex-row gap-6 items-center mt-8 sm:mt-2">
           <div className="flex flex-col">
             <div className="text-lg text-white font-bold">
-              Win a $50 Free Bet ✨
+              Win a $50 Free Bet{' '}
+              <span role="img" aria-label="shine">
+                ✨
+              </span>
             </div>
             <div className="text-xs text-white/70">{event.subtitle}</div>
           </div>
