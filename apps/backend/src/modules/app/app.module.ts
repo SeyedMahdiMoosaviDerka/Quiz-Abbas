@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Quiz } from '@app/database/quiz/quiz.entity';
+import { Event } from '@database/event/event.entity';
+import { Quiz } from '@database/quiz/quiz.entity';
+import { Answer } from '@database/answer/answer.entity';
 import { AppController } from './controllers/app.controller';
 import { AppService } from './services/app.service';
-import { Answer } from '@app/database/answer/answer.entity';
-import { Event } from '@app/database/event/event.entity';
+import { EventModule } from '@modules/event/event.module';
+import { QuizModule } from '@modules/quiz/quiz.module';
+import { AnswerModule } from '@modules/answer/answer.module';
 
 @Module({
   imports: [
@@ -15,12 +18,13 @@ import { Event } from '@app/database/event/event.entity';
       username: 'postgres',
       password: 'root', // Replace with your actual password
       database: 'sports_quiz',
-      autoLoadEntities: true, // Ensure all entities are here
-      synchronize: true,
+      entities: [Event, Quiz, Answer],
+      synchronize: true, // Set to false in production
     }),
-    TypeOrmModule.forFeature([Quiz, Answer, Event]),
+    EventModule,
+    QuizModule,
+    AnswerModule,
   ],
-
   controllers: [AppController],
   providers: [AppService],
 })

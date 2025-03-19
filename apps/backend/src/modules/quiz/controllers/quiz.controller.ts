@@ -7,8 +7,8 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { QuizService } from '../services/quiz.service';
-import { CreateQuizDto } from '../../../common/dto/quiz/create-quiz.dto';
-import { ApiDocDecorator } from '@app/configs/swagger/decorator';
+import { CreateQuizDto } from '@common/dto/quiz/create-quiz.dto';
+import { ApiDocDecorator } from '@configs/swagger/decorator';
 
 @Controller('events/:eventId/quizzes')
 export class QuizController {

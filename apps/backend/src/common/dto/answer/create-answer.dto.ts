@@ -1,34 +1,31 @@
-import {
-  IsString,
-  IsInt,
-  Min,
-  IsArray,
-  ValidateNested,
-  IsNotEmpty,
-} from 'class-validator';
-import { Type } from 'class-transformer';
-
-export class UserAnswerDto {
-  @IsInt()
-  @Min(0)
-  questionIndex: number;
-
-  @IsString()
-  @IsNotEmpty()
-  answer: string;
-}
+import { ApiProperty } from '@nestjs/swagger';
+import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { mockData } from '../../../configs/swagger/mock';
+import { AnswerItemDto } from './answer-item.dto';
 
 export class CreateAnswerDto {
-  @IsString()
+  @ApiProperty({
+    description: 'Unique identifier of the user submitting the answer',
+    example: mockData.createAnswerDto.userId,
+  })
   @IsNotEmpty()
+  @IsString()
   userId: string;
 
-  @IsInt()
-  @Min(1)
+  @ApiProperty({
+    description: 'ID of the event the answer is for',
+    example: mockData.createAnswerDto.eventId,
+  })
+  @IsNotEmpty()
+  @IsNumber()
   eventId: number;
 
+  @ApiProperty({
+    description: 'Array of user answers for the quiz questions',
+    type: [AnswerItemDto],
+    example: mockData.createAnswerDto.answers,
+  })
+  @IsNotEmpty()
   @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => UserAnswerDto)
-  answers: UserAnswerDto[];
+  answers: AnswerItemDto[];
 }

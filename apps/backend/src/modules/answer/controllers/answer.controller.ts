@@ -1,4 +1,3 @@
-import { CreateAnswerDto } from '@app/common/dto/answer/create-answer.dto';
 import {
   Controller,
   Post,
@@ -8,18 +7,21 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AnswerService } from '../services/answer.service';
+import { CreateAnswerDto } from '@common/dto/answer/create-answer.dto';
+import { ApiDocDecorator } from '@configs/swagger/decorator';
 
 @Controller('answers')
-export class AnswersController {
-  constructor(private readonly answersService: AnswerService) {}
+export class AnswerController {
+  constructor(private readonly answerService: AnswerService) {}
 
   @Post()
   @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiDocDecorator('submitAnswer')
   async create(
     @Body() createAnswerDto: CreateAnswerDto,
     @Query('validationLevel') validationLevel: 'none' | 'moderate' = 'none'
   ) {
-    const result = await this.answersService.create(
+    const result = await this.answerService.create(
       createAnswerDto,
       validationLevel
     );

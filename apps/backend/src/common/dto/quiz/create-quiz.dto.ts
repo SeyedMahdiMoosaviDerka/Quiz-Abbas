@@ -1,22 +1,29 @@
-import {
-  IsString,
-  IsArray,
-  IsNumber,
-  IsNotEmpty,
-  ArrayNotEmpty,
-} from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsNumber, IsString, IsArray } from 'class-validator';
+import { mockData } from '../../../configs/swagger/mock';
 
 export class CreateQuizDto {
-  @IsString()
+  @ApiProperty({
+    description: 'The quiz question',
+    example: mockData.createQuizDto.question,
+  })
   @IsNotEmpty()
+  @IsString()
   question: string;
 
+  @ApiProperty({
+    description: 'Array of possible answers',
+    example: mockData.createQuizDto.answers,
+  })
+  @IsNotEmpty()
   @IsArray()
-  @ArrayNotEmpty()
-  @IsString({ each: true })
   answers: string[];
 
-  @IsNumber()
+  @ApiProperty({
+    description: 'ID of the associated event',
+    example: mockData.createQuizDto.eventId,
+  })
   @IsNotEmpty()
+  @IsNumber()
   eventId: number;
 }
