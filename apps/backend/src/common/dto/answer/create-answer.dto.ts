@@ -5,27 +5,28 @@ import { AnswerItemDto } from './answer-item.dto';
 
 export class CreateAnswerDto {
   @ApiProperty({
-    description: 'Unique identifier of the user submitting the answer',
+    description: 'Unique identifier of the user submitting the answers',
     example: mockData.createAnswerDto.userId,
   })
   @IsNotEmpty()
   @IsString()
-  userId: string;
+  userId!: string;
 
   @ApiProperty({
-    description: 'ID of the event the answer is for',
+    description: 'ID of the event for which all answers are submitted',
     example: mockData.createAnswerDto.eventId,
   })
   @IsNotEmpty()
   @IsNumber()
-  eventId: number;
+  eventId!: number;
 
   @ApiProperty({
-    description: 'Array of user answers for the quiz questions',
+    description:
+      'Array containing all user answers for the event’s quiz questions, submitted at once',
     type: [AnswerItemDto],
     example: mockData.createAnswerDto.answers,
   })
   @IsNotEmpty()
   @IsArray()
-  answers: AnswerItemDto[];
+  answers!: AnswerItemDto[];
 }

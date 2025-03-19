@@ -29,77 +29,88 @@ export class AnswerService {
     });
     if (existingAnswer) throw exceptions.answer.duplicateSubmission();
 
-    // Fetch event and check if started
-    const event = await this.eventsService.findOne(createAnswerDto.eventId); // Throws notFound if missing
-    const isStarted = await this.eventsService.isEventStarted(
-      createAnswerDto.eventId
-    );
-    if (!isStarted) throw exceptions.answer.eventNotStarted();
+    const event = await this.eventsService.findOne(createAnswerDto.eventId);
+    const now = new Date();
+    if (now < event.startTime) throw exceptions.answer.eventNotStarted();
+    if (now > event.startTime) throw exceptions.event.closed();
 
-    const quizQuestions = event.quiz?.questions || [];
+    const quizQuestions = event.quizzes || [];
 
     // Validation based on level
-    if (validationLevel === 'moderate' || validationLevel === 'strict') {
-      if (!createAnswerDto.answers || !Array.isArray(createAnswerDto.answers)) {
-        warnings.push('Answers must be an array');
-      } else {
-        // Moderate: Check all questions answered, no extra fields
-        if (validationLevel === 'moderate') {
-          const answeredIndexes = new Set(
-            createAnswerDto.answers.map((a) => a.questionIndex)
-          );
+    if (!createAnswerDto.answers || !Array.isArray(createAnswerDto.answers)) {
+      warnings.push('Answers must be an array');
+    } else {
+      if (validationLevel === 'none') {
+        createAnswerDto.answers.forEach((answer, i) => {
           if (
-            quizQuestions.length > 0 &&
-            answeredIndexes.size < quizQuestions.length
+            typeof answer.questionIndex !== 'number' ||
+            answer.questionIndex < 0
           ) {
-            warnings.push('Not all questions were answered');
+            warnings.push(`Invalid question index at position ${i}`);
           }
-          createAnswerDto.answers.forEach((answer, i) => {
-            if (
-              typeof answer.questionIndex !== 'number' ||
-              answer.questionIndex < 0
-            ) {
-              warnings.push(`Invalid question index at position ${i}`);
-            }
-            if (typeof answer.answer !== 'string' || !answer.answer) {
-              warnings.push(`Invalid answer format at position ${i}`);
-            }
-            if (Object.keys(answer).length > 2) {
-              warnings.push(`Extra fields detected in answer at position ${i}`);
-            }
-          });
-        }
+          if (typeof answer.answer !== 'string' || !answer.answer.trim()) {
+            warnings.push(`Invalid answer format at position ${i}`);
+          }
+        });
+      }
 
-        // Strict: Check answers match options
-        if (validationLevel === 'strict' && quizQuestions.length > 0) {
-          createAnswerDto.answers.forEach((userAnswer, i) => {
-            if (
-              typeof userAnswer.questionIndex !== 'number' ||
-              userAnswer.questionIndex >= quizQuestions.length
-            ) {
-              warnings.push(
-                `Invalid question index ${userAnswer.questionIndex} at position ${i}`
-              );
-            } else if (
-              typeof userAnswer.answer !== 'string' ||
-              !quizQuestions[userAnswer.questionIndex].options.includes(
-                userAnswer.answer
-              )
-            ) {
-              warnings.push(
-                `Invalid answer "${userAnswer.answer}" for question ${userAnswer.questionIndex}`
-              );
-            }
-          });
+      // Moderate validation
+      if (validationLevel === 'moderate' || validationLevel === 'strict') {
+        const answeredIndexes = new Set(
+          createAnswerDto.answers.map((a) => a.questionIndex)
+        );
+        if (
+          quizQuestions.length > 0 &&
+          answeredIndexes.size < quizQuestions.length
+        ) {
+          warnings.push('Not all quiz questions were answered');
         }
+        createAnswerDto.answers.forEach((answer, i) => {
+          if (
+            typeof answer.questionIndex !== 'number' ||
+            answer.questionIndex < 0
+          ) {
+            warnings.push(`Invalid question index at position ${i}`);
+          }
+          if (typeof answer.answer !== 'string' || !answer.answer) {
+            warnings.push(`Invalid answer format at position ${i}`);
+          }
+          if (Object.keys(answer).length > 2) {
+            warnings.push(`Extra fields detected in answer at position ${i}`);
+          }
+        });
+      }
+
+      // Strict validation
+      if (validationLevel === 'strict' && quizQuestions.length > 0) {
+        createAnswerDto.answers.forEach((userAnswer, i) => {
+          if (
+            typeof userAnswer.questionIndex !== 'number' ||
+            userAnswer.questionIndex >= quizQuestions.length ||
+            userAnswer.questionIndex < 0
+          ) {
+            warnings.push(
+              `Invalid question index ${userAnswer.questionIndex} at position ${i}`
+            );
+          } else if (
+            typeof userAnswer.answer !== 'string' ||
+            !quizQuestions[userAnswer.questionIndex].options.includes(
+              userAnswer.answer
+            )
+          ) {
+            warnings.push(
+              `Invalid answer "${userAnswer.answer}" for question ${userAnswer.questionIndex}`
+            );
+          }
+        });
       }
     }
 
-    // Save regardless of warnings
+    // Save answers
     const answerEntity = this.answersRepository.create({
-      userId: createAnswerDto.userId || 'unknown', // Accept garbage userId
+      userId: createAnswerDto.userId || 'unknown',
       event,
-      answers: createAnswerDto.answers || [], // Accept empty or invalid answers
+      answers: createAnswerDto.answers || [],
     });
 
     await this.answersRepository.save(answerEntity);

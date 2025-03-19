@@ -5,6 +5,7 @@ const errorMessage = {
     notFound: 'Event not found',
     alreadyStarted: 'Event has already started',
     notStarted: 'Event has not started yet',
+    closed: 'Event has started, quiz is closed',
   },
   quiz: {
     notFound: 'Quiz not found',
@@ -35,6 +36,12 @@ export const exceptions = {
       new HttpException(
         { message: errorMessage.event.notStarted, code: 'EVENT_NOT_STARTED' },
         HttpStatus.BAD_REQUEST
+      ),
+    closed: () =>
+      // New exception
+      new HttpException(
+        { message: errorMessage.event.closed, code: 'EVENT_CLOSED' },
+        HttpStatus.FORBIDDEN
       ),
   },
   quiz: {

@@ -1,25 +1,26 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/apps/backend",
-    "rootDir": "src",
-    "baseUrl": "src",
-    "paths": {
-      "@app/*": ["*"],
-      "@configs/*": ["configs/*"],
-      "@common/*": ["common/*"],
-      "@database/*": ["database/*"],
-      "@modules/*": ["modules/*"]
-    },
-    "module": "commonjs",
-    "target": "es2016",
-    "types": ["node"],
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "noEmitHelpers": false,
-    "noImplicitAny": false,
-    "sourceMap": false
+  "outDir": "../../dist/apps/backend",
+  "rootDir": "src",
+  "baseUrl": "src",
+  "paths": {
+    "@app/*": ["*"],
+    "@configs/*": ["configs/*"],
+    "@common/*": ["common/*"],
+    "@database/*": ["database/*"],
+    "@modules/*": ["modules/*"]
   },
+  "module": "commonjs",
+  "target": "es2016",
+  "types": ["node"],
+  "emitDecoratorMetadata": true,
+  "experimentalDecorators": true,
+  "noEmitHelpers": false,
+  "noImplicitAny": true, // Stricter type checking
+  "strict": true, // Enable all strict type-checking options
+  "sourceMap": false
+},
   "include": ["src/**/*.ts"],
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"]
 }

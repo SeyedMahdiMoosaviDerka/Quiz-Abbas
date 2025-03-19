@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString, IsArray } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsArray,
+  ArrayMaxSize,
+} from 'class-validator';
 import { mockData } from '../../../configs/swagger/mock';
 
 export class CreateQuizDto {
@@ -9,15 +15,17 @@ export class CreateQuizDto {
   })
   @IsNotEmpty()
   @IsString()
-  question: string;
+  question!: string;
 
   @ApiProperty({
-    description: 'Array of possible answers',
-    example: mockData.createQuizDto.answers,
+    description: 'Array of up to 6 possible answer options',
+    example: mockData.createQuizDto.options,
+    maxItems: 6,
   })
   @IsNotEmpty()
   @IsArray()
-  answers: string[];
+  @ArrayMaxSize(6) // Enforce max 6 options per task requirement
+  options!: string[];
 
   @ApiProperty({
     description: 'ID of the associated event',
@@ -25,5 +33,5 @@ export class CreateQuizDto {
   })
   @IsNotEmpty()
   @IsNumber()
-  eventId: number;
+  eventId!: number;
 }

@@ -4,14 +4,14 @@ import { mockData } from '../../../configs/swagger/mock';
 
 export class AnswerItemDto {
   @ApiProperty({
-    description: 'Index of the question being answered',
+    description: 'Index of the quiz question being answered',
     example: mockData.createAnswerDto.answers[0].questionIndex,
   })
   @IsNumber()
   questionIndex: number;
 
   @ApiProperty({
-    description: 'User’s answer to the question',
+    description: 'User’s answer to the corresponding question',
     example: mockData.createAnswerDto.answers[0].answer,
   })
   @IsString()

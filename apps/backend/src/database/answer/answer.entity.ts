@@ -9,14 +9,17 @@ interface UserAnswer {
 @Entity()
 export class Answer {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  userId: string;
+  userId!: string;
 
   @ManyToOne(() => Event)
-  event: Event;
+  event!: Event;
 
   @Column('json')
-  answers: UserAnswer[];
+  answers!: UserAnswer[];
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  submittedAt!: Date; // New field for sorting/filtering
 }

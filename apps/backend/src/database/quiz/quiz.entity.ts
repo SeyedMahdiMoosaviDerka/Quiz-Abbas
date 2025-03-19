@@ -1,19 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Event } from '../event/event.entity';
-
-interface Question {
-  title: string;
-  options: string[];
-}
 
 @Entity()
 export class Quiz {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
+
+  @Column()
+  question!: string; // Single question text
 
   @Column('json')
-  questions: Question[];
+  options!: string[]; // Predefined answer options
 
-  @OneToOne(() => Event, (event) => event.quiz)
-  event: Event;
+  @ManyToOne(() => Event, (event) => event.quizzes)
+  event!: Event;
 }

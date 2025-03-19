@@ -27,7 +27,7 @@ export const mockData = {
   },
   createQuizDto: {
     question: 'Who will win?',
-    answers: ['Manchester City', 'Manchester United', 'Draw'],
+    options: ['Manchester City', 'Manchester United', 'Draw'],
     eventId: 1,
   } as CreateQuizDto,
   answer: {
